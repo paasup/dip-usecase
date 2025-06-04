@@ -17,7 +17,7 @@ t1 = SparkKubernetesOperator(
    task_id='load_subway_passengers',
    namespace="demo01-spark-job",
    application_file="./spark-app.yaml",
-   params={"from_date": False, "to_date": False},
+   params={"WK_YM": False},
    dag=dag
 )
 

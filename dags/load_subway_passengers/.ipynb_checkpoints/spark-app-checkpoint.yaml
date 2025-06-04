@@ -1,7 +1,7 @@
 apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
-  name: load-subway-passengers #-{{ params.WK_YM if params.WK_YM else data_interval_start.in_timezone("Asia/Seoul").strftime("%Y%m") }}
+  name: load-subway-passengers  #-{{ params.WK_YM if params.WK_YM else data_interval_start.in_timezone("Asia/Seoul").strftime("%Y%m") }}
   namespace: demo01-spark-job
 spec:
   type: Python
@@ -21,6 +21,7 @@ spec:
     spark.haddop.fs.s3a.aws.credentials.provider: "EnvironmentVariableCredentialsProvider"
     spark.sql.extensions: "io.delta.sql.DeltaSparkSessionExtension"
     spark.sql.catalog.spark_catalog: "org.apache.spark.sql.delta.catalog.DeltaCatalog"
+    spark.kubernetes.driverEnv.WK_YM: "202504" #{{ params.from_date if params.from_date else data_interval_start.in_timezone("Asia/Seoul").strftime("%Y-%m-%d") }}
     # 도커 이미지에 jar 파일을 포함 시켜 아래 설정이 필요 없음
     # 이미지 내에 jar 파일이 있더라도 아래 설정을 추가하면 다운로드를 시도하여 이미지 내에 있을 때는 제외시켜야 함.
     spark.jars.packages: "org.apache.hadoop:hadoop-common:3.3.4,org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262,io.delta:delta-spark_2.12:3.3.1,org.postgresql:postgresql:42.7.2"
