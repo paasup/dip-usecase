@@ -30,5 +30,4 @@ t1 = SparkKubernetesOperator(
    # 환경변수나 template_fields를 통해 파라미터 전달
    dag=dag
 )
-
 t1
