@@ -10,14 +10,21 @@ dag = DAG(
    description='submit deltalake example as sparkApplication on kubernetes',
    schedule_interval=timedelta(days=1),
    start_date=datetime(2025, 6, 1),
-   catchup=False
+   catchup=False, 
+   params={
+       "WK_YM": Param(
+           default="202504",
+           type="string",
+           description="작업 년월 (YYYYMM 형식)"
+       )
+    
 )
 
 t1 = SparkKubernetesOperator(
    task_id='load_subway_passengers',
    namespace="demo01-spark-job",
    application_file="./spark-app.yaml",
-   params={"WK_YM": False},
+   params="{{ dag_run.conf.get('WK_YM', params.WK_YM) }}",
    dag=dag
 )
 
