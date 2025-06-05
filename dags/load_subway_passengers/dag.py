@@ -1,5 +1,7 @@
+
 from datetime import datetime, timedelta
 from airflow import DAG
+from airflow.models.param import Param
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 
@@ -10,7 +12,8 @@ dag = DAG(
    description='submit deltalake example as sparkApplication on kubernetes',
    schedule_interval=timedelta(days=1),
    start_date=datetime(2025, 6, 1),
-   catchup=False, 
+   catchup=False,
+   # DAG 레벨에서 파라미터 정의
    params={
        "WK_YM": Param(
            default="202504",
@@ -18,15 +21,14 @@ dag = DAG(
            description="작업 년월 (YYYYMM 형식)"
        )
    }
-    
 )
 
 t1 = SparkKubernetesOperator(
    task_id='load_subway_passengers',
    namespace="demo01-spark-job",
    application_file="./spark-app.yaml",
-   params="{{ dag_run.conf.get('WK_YM', params.WK_YM) }}",
+   # 환경변수나 template_fields를 통해 파라미터 전달
    dag=dag
 )
 
-t1 
+t1
