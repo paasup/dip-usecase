@@ -17,6 +17,7 @@ dag = DAG(
            type="string",
            description="작업 년월 (YYYYMM 형식)"
        )
+   }
     
 )
 
